@@ -16,7 +16,7 @@ export class NestDeploymentStack extends cdk.Stack {
       handler: 'main.handler',
       code: lambda.Code.fromAsset("../dist"),
       environment: {
-        DB_LOGIN: config.DB_LOGIN || "",
+        DB_USER: config.DB_USER || "",
         BB_PASSWORD: config.DB_PASSWORD || ""
       }
     });
