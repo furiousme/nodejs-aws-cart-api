@@ -2,10 +2,11 @@ import * as cdk from 'aws-cdk-lib';
 
 import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import config from "../../config"
+import getConfig from "../../config"
 import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { join } from 'node:path';
+
+const config = getConfig();
 
 export class NestDeploymentStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -16,8 +17,10 @@ export class NestDeploymentStack extends cdk.Stack {
       handler: 'main.handler',
       code: lambda.Code.fromAsset("../dist"),
       environment: {
-        DB_USER: config.DB_USER || "",
-        BB_PASSWORD: config.DB_PASSWORD || ""
+        HOST: config.DATABASE.DB_HOST,
+        PORT: config.DATABASE.DB_PORT,
+        DB_USER: config.DATABASE.DB_USER,
+        BB_PASSWORD: config.DATABASE.DB_PASSWORD,
       }
     });
 
