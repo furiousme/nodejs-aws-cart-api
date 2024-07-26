@@ -30,8 +30,7 @@ import configuration from "../config";
           username:  configService.get("DATABASE.DB_USER"),
           password:  configService.get("DATABASE.DB_PASSWORD"),
           database: configService.get("DATABASE.DB_NAME"),
-          synchronize: true,
-          entities: [__dirname + "/**/*.entity.ts"],
+          entities: [__dirname + "/**/*.entity.js"],
           ssl: true,
           extra: {
             ssl: {
