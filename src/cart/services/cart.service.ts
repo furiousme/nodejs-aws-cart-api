@@ -17,8 +17,9 @@ export class CartService {
 
   async findByUserId(userId: string) {
     const cart = await this.cartRepository.findOneBy({userId});
+    const items = cart ? await this.cartItemRepository.findBy({cartId: cart.id}) : [];
 
-    if (cart) return {...cart, items: []}; // TODO: temp, remove later
+    if (cart) return {...cart, items};
   }
 
   async createByUserId(userId: string, items: any[]) {
@@ -28,10 +29,10 @@ export class CartService {
       createdAt: new Date()
     })
 
-  const savedCart = await this.cartRepository.save(newCart);
-  
-  return { ...savedCart, items: []}
-}
+    const savedCart = await this.cartRepository.save(newCart);
+    
+    return { ...savedCart, items: []}
+  }
 
   async findOrCreateByUserId(userId: string, items = []) {
     const userCart = await this.findByUserId(userId);
@@ -60,7 +61,7 @@ export class CartService {
     return { ...cart, items };
   }
 
-  // removeByUserId(userId): void {
-  //   this.userCarts[ userId ] = null;
-  // }
+  removeByUserId(userId) {
+    return this.cartRepository.delete({userId});
+  }
 }

@@ -45,7 +45,7 @@ export class CartController {
   @Put()
   async updateUserCart(@Req() req: AppRequest, @Body() body) { // TODO: validate body payload...
     try {
-      // const userId = getUserIdFromRequest(req);
+      // const userId = getUserIdFromRequest(req);      
       const {count, product} = body;
       const cart = await this.cartService.updateByUserId(userId, {count, product});
   
@@ -65,15 +65,23 @@ export class CartController {
 
   // @UseGuards(JwtAuthGuard)
   // @UseGuards(BasicAuthGuard)
-  // @Delete()
-  // clearUserCart(@Req() req: AppRequest) {
-  //   this.cartService.removeByUserId(getUserIdFromRequest(req));
+  @Delete()
+  async clearUserCart(@Req() req: AppRequest) {
+    try {
+      // const userId = getUserIdFromRequest(req);
+      await this.cartService.removeByUserId(userId);
 
-  //   return {
-  //     statusCode: HttpStatus.OK,
-  //     message: 'OK',
-  //   }
-  // }
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'OK',
+      }
+    } catch (e) {
+      return {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: 'Failed to delete user cart',
+      }
+    }
+  }
 
   // @UseGuards(JwtAuthGuard)
   // @UseGuards(BasicAuthGuard)
