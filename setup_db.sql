@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS carts (
 )
 
 CREATE TABLE IF NOT EXISTS cart_items (
+ id uuid NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
  cart_id uuid NOT NULL REFERENCES carts(id),
  product_id uuid NOT NULL,
  count integer NOT NULL

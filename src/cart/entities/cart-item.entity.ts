@@ -3,7 +3,10 @@ import { Cart } from "./cart.entity";
 
 @Entity({name: "cart_items"})
 export class CartItem {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn("uuid")
+    id: string
+
+    @Column({name: "cart_id"})
     cartId: string;
   
     @ManyToOne(() => Cart, { onDelete: 'CASCADE' })

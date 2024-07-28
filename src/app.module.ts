@@ -9,6 +9,8 @@ import { AuthModule } from './auth/auth.module';
 import { OrderModule } from './order/order.module';
 
 import configuration from "../config";
+import {dbConfig} from './db-config';
+
 
 @Module({
   imports: [
@@ -23,24 +25,9 @@ import configuration from "../config";
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        return ({
-          type: 'postgres',
-          host: configService.get("DATABASE.DB_HOST"),
-          port:  configService.get("DATABASE.DB_PORT"),
-          username:  configService.get("DATABASE.DB_USER"),
-          password:  configService.get("DATABASE.DB_PASSWORD"),
-          database: configService.get("DATABASE.DB_NAME"),
-          entities: [__dirname + "/**/*.entity.js"],
-          ssl: true,
-          extra: {
-            ssl: {
-              rejectUnauthorized: false
-            },
-          },
-        })
+        return dbConfig
       },
-    }),
-  ],
+    })],
   controllers: [
     AppController,
   ],
