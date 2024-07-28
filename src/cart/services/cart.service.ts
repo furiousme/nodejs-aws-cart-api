@@ -34,35 +34,31 @@ export class CartService {
 }
 
   async findOrCreateByUserId(userId: string, items = []) {
-    const userCart = this.findByUserId(userId);
-
+    const userCart = await this.findByUserId(userId);
+    
     if (userCart) return userCart;
 
     return this.createByUserId(userId, items);
   }
 
-  // updateByUserId(userId: string, { items }: Cart): Cart {
-  //   const { id, ...rest } = this.findOrCreateByUserId(userId);
-
-  //   const updatedCart = {
-  //     id,
-  //     ...rest,
-  //     items: [ ...items ],
-  //   }
-
-  //   this.userCarts[ userId ] = { ...updatedCart };
-
-  // await this.cartRepository.manager.transaction(async manager => {
-  //   savedCart = await manager.save(newCart);
-
-  //   for (const item of items) {
-  //     item.cartId = savedCart.id;
-  //     await manager.save(item);
-  //   }
-  // });
-
-  //   return { ...updatedCart };
-  // }
+  async updateByUserId(userId: string, {count, product}) {
+    const cart = await this.findOrCreateByUserId(userId);
+    const { id: cartId } = cart;
+    const itemWithCartId = this.cartItemRepository.create({
+      productId: product.id,
+      cartId,
+      count
+    });
+    const itemsInCart = await this.cartItemRepository.findBy({cartId});
+    const existingProduct = itemsInCart.find(el => el.productId === itemWithCartId.productId);
+    const itemToSave = existingProduct ? {...itemWithCartId, id: existingProduct.id} : itemWithCartId
+    
+    await this.cartItemRepository.save(itemToSave);
+    
+    const items = await this.cartItemRepository.findBy({cartId});
+  
+    return { ...cart, items };
+  }
 
   // removeByUserId(userId): void {
   //   this.userCarts[ userId ] = null;

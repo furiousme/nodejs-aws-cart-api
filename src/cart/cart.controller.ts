@@ -7,6 +7,8 @@ import { AppRequest, getUserIdFromRequest } from '../shared';
 import { calculateCartTotal } from './models-rules';
 import { CartService } from './services';
 
+const userId = "46442aee-1ae2-4fb1-a468-36bfa54eb3b8"  // TODO: temp, remove later
+
 @Controller('api/profile/cart')
 export class CartController {
   constructor(
@@ -20,21 +22,19 @@ export class CartController {
   async findUserCart(@Req() req: AppRequest) {
     try {
       // const userId = getUserIdFromRequest(req);
-      const userId = "46442aee-1ae2-4fb1-a468-36bfa54eb3b8" // TODO: temp, remove later
       const cart = await this.cartService.findOrCreateByUserId(userId);
 
       return {
         statusCode: HttpStatus.OK,
         message: 'OK',
-        data: { cart, total: calculateCartTotal(cart) },
+        data: cart,
       }
     } catch (e) {
       console.log(e);
 
       return {
         statusCode: HttpStatus.BAD_REQUEST,
-        message: 'Failed to create',
-        error: e
+        message: 'Failed to create a cart',
       }
     }
 
@@ -42,19 +42,26 @@ export class CartController {
 
   // @UseGuards(JwtAuthGuard)
   // @UseGuards(BasicAuthGuard)
-  // @Put()
-  // updateUserCart(@Req() req: AppRequest, @Body() body) { // TODO: validate body payload...
-  //   const cart = this.cartService.updateByUserId(getUserIdFromRequest(req), body)
-
-  //   return {
-  //     statusCode: HttpStatus.OK,
-  //     message: 'OK',
-  //     data: {
-  //       cart,
-  //       total: calculateCartTotal(cart),
-  //     }
-  //   }
-  // }
+  @Put()
+  async updateUserCart(@Req() req: AppRequest, @Body() body) { // TODO: validate body payload...
+    try {
+      // const userId = getUserIdFromRequest(req);
+      const {count, product} = body;
+      const cart = await this.cartService.updateByUserId(userId, {count, product});
+  
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'OK',
+        data: cart
+      }
+    } catch (e) {
+      console.log(e)
+      return {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: 'Failed to update a cart',
+      }
+    }
+  }
 
   // @UseGuards(JwtAuthGuard)
   // @UseGuards(BasicAuthGuard)
