@@ -85,36 +85,42 @@ export class CartController {
 
   // @UseGuards(JwtAuthGuard)
   // @UseGuards(BasicAuthGuard)
-  // @Post('checkout')
-  // checkout(@Req() req: AppRequest, @Body() body) {
-  //   const userId = getUserIdFromRequest(req);
-  //   const cart = this.cartService.findByUserId(userId);
+  @Post('checkout')
+  async checkout(@Req() req: AppRequest, @Body() body) {
+    try {
+          // const userId = getUserIdFromRequest(req);
+      const cart = await this.cartService.findByUserId(userId);
 
-  //   if (!(cart && cart.items.length)) {
-  //     const statusCode = HttpStatus.BAD_REQUEST;
-  //     req.statusCode = statusCode
+      if (!(cart && cart.items.length)) {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Cart is empty',
+        }
+      }
 
-  //     return {
-  //       statusCode,
-  //       message: 'Cart is empty',
-  //     }
-  //   }
+      const { id: cartId, items } = cart;
+      // const total = calculateCartTotal(cart);
+      const total = items.reduce((acc, el) => acc += el.count, 0) // temp
+      const order = this.orderService.create({
+        ...body, // TODO: validate and pick only necessary data
+        userId,
+        cartId,
+        items,
+        total
+      });
 
-  //   const { id: cartId, items } = cart;
-  //   const total = calculateCartTotal(cart);
-  //   const order = this.orderService.create({
-  //     ...body, // TODO: validate and pick only necessary data
-  //     userId,
-  //     cartId,
-  //     items,
-  //     total,
-  //   });
-  //   this.cartService.removeByUserId(userId);
+      await this.cartService.removeByUserId(userId);
 
-  //   return {
-  //     statusCode: HttpStatus.OK,
-  //     message: 'OK',
-  //     data: { order }
-  //   }
-  // }
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'OK',
+        data: { order }
+      }
+    } catch (e) {
+      return {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: 'Failed to checkout',
+      }
+    }
+  }
 }

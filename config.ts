@@ -3,7 +3,6 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export default () => ({
-    PORT: parseInt(process.env.PORT, 10) || 3000,
     DATABASE: {
       DB_NAME: process.env.DB_NAME || "",
       DB_HOST: process.env.DB_HOST || "",
