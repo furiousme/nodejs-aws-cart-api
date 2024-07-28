@@ -1,6 +1,8 @@
 import { DataSource } from "typeorm";
 import configuration from "../config";
 import { join } from "node:path";
+import { CartItem } from "./cart/entities/cart-item.entity";
+import { Cart } from "./cart/entities/cart.entity";
 
 const config = configuration();
 
@@ -11,9 +13,10 @@ export const dbConfig = {
   username:  config.DATABASE.DB_USER,
   password:  config.DATABASE.DB_PASSWORD,
   database: config.DATABASE.DB_NAME,
-  entities: [join(__dirname, '**', '*.entity.{ts,js}')],
-  migrations: ["dist/migrations/*.js"],
+  entities: [Cart, CartItem],
+  migrations: [join(__dirname, "src", "migrations", '*.{ts,js}')],
   migrationsRun: false,
+  logging: true,
   ssl: false,
   extra: {
     ssl: {

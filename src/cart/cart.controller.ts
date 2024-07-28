@@ -32,6 +32,7 @@ export class CartController {
     } catch (e) {
       console.log(e);
 
+      // TODO: Add proper error responses
       return {
         statusCode: HttpStatus.BAD_REQUEST,
         message: 'Failed to create a cart',

@@ -11,7 +11,6 @@ import { OrderModule } from './order/order.module';
 import configuration from "../config";
 import {dbConfig} from './db-config';
 
-
 @Module({
   imports: [
     AuthModule,
@@ -24,7 +23,7 @@ import {dbConfig} from './db-config';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
+      useFactory: () => {
         return dbConfig
       },
     })],
@@ -33,4 +32,5 @@ import {dbConfig} from './db-config';
   ],
   providers: [],
 })
+
 export class AppModule {}

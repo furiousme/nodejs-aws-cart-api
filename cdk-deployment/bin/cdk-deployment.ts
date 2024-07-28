@@ -3,8 +3,16 @@ import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { NestDeploymentStack } from '../lib/cdk-deployment-stack';
 
+import getConfig from '../../config';
+
+const config = getConfig();
+
 const app = new cdk.App();
 new NestDeploymentStack(app, 'NestDeploymentStack', {
+  env: {
+    account: config.ACCOUNT.ID,
+    region: config.ACCOUNT.REGION
+  }
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */

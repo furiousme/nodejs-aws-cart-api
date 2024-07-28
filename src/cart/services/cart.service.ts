@@ -36,6 +36,8 @@ export class CartService {
 
   async findOrCreateByUserId(userId: string, items = []) {
     const userCart = await this.findByUserId(userId);
+
+    console.log("CART WAS FOUND")
     
     if (userCart) return userCart;
 
