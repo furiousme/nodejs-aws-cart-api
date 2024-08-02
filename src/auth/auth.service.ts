@@ -1,8 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/services/users.service';
 import { User } from '../users/models';
-import { contentSecurityPolicy } from 'helmet';
 
 @Injectable()
 export class AuthService {
@@ -11,14 +10,16 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  validateUser(name: string, password: string): any {
-    const user = this.usersService.findOne(name);
+  async validateUser(username: string, password: string) {
+    const user = await this.usersService.findOne(username);
 
-    if (user) {
+    if (user && user.password === password) { // temp, add proper logic later
       return user;
-    }
+    } else if (user && user.password !== password) {
+      throw new BadRequestException("Incorrect credentials");
+    } 
 
-    return this.usersService.createOne({ name, password })
+    return this.usersService.createOne({ username, password });
   }
 
   login(user: User, type) {
@@ -43,11 +44,10 @@ export class AuthService {
 
   loginBasic(user: User) {
     // const payload = { username: user.name, sub: user.id };
-    console.log(user);
 
     function encodeUserToken(user) {
-      const { id, name, password } = user;
-      const buf = Buffer.from([name, password].join(':'), 'utf8');
+      const { id, username, password } = user;
+      const buf = Buffer.from([username, password].join(':'), 'utf8');
 
       return buf.toString('base64');
     }
