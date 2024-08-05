@@ -10,14 +10,12 @@ import { OrderModule } from './order/order.module';
 
 import configuration from "../config";
 import {dbConfig} from './db-config';
-import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     AuthModule,
     CartModule,
     OrderModule,
-    UsersModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],

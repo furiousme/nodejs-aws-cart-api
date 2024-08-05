@@ -1,10 +1,13 @@
-import { Controller, Get, Delete, Put, Body, Req, Post, UseGuards, HttpStatus, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Delete, Put, Body, Req, Post, UseGuards, HttpStatus } from '@nestjs/common';
 
-import { BasicAuthGuard } from '../auth';
+// import { BasicAuthGuard, JwtAuthGuard } from '../auth';
 import { OrderService } from '../order';
 import { AppRequest, getUserIdFromRequest } from '../shared';
 
+import { calculateCartTotal } from './models-rules';
 import { CartService } from './services';
+
+const userId = "46442aee-1ae2-4fb1-a468-36bfa54eb3b8"  // TODO: temp, remove later
 
 @Controller('api/profile/cart')
 export class CartController {
@@ -14,11 +17,11 @@ export class CartController {
   ) { }
 
   // @UseGuards(JwtAuthGuard)
-  @UseGuards(BasicAuthGuard)
+  // @UseGuards(BasicAuthGuard)
   @Get()
   async findUserCart(@Req() req: AppRequest) {
     try {
-      const userId = getUserIdFromRequest(req);
+      // const userId = getUserIdFromRequest(req);
       const cart = await this.cartService.findOrCreateByUserId(userId);
 
       return {
@@ -39,11 +42,11 @@ export class CartController {
   }
 
   // @UseGuards(JwtAuthGuard)
-  @UseGuards(BasicAuthGuard)
+  // @UseGuards(BasicAuthGuard)
   @Put()
   async updateUserCart(@Req() req: AppRequest, @Body() body) { // TODO: validate body payload...
     try {
-      const userId = getUserIdFromRequest(req);      
+      // const userId = getUserIdFromRequest(req);      
       const {count, product} = body;
       const cart = await this.cartService.updateByUserId(userId, {count, product});
   
@@ -62,11 +65,11 @@ export class CartController {
   }
 
   // @UseGuards(JwtAuthGuard)
-  @UseGuards(BasicAuthGuard)
+  // @UseGuards(BasicAuthGuard)
   @Delete()
   async clearUserCart(@Req() req: AppRequest) {
     try {
-      const userId = getUserIdFromRequest(req);
+      // const userId = getUserIdFromRequest(req);
       await this.cartService.removeByUserId(userId);
 
       return {
@@ -82,15 +85,18 @@ export class CartController {
   }
 
   // @UseGuards(JwtAuthGuard)
-  @UseGuards(BasicAuthGuard)
+  // @UseGuards(BasicAuthGuard)
   @Post('checkout')
   async checkout(@Req() req: AppRequest, @Body() body) {
     try {
-      const userId = getUserIdFromRequest(req);
+          // const userId = getUserIdFromRequest(req);
       const cart = await this.cartService.findByUserId(userId);
 
       if (!(cart && cart.items.length)) {
-        return new BadRequestException('Cart is empty');
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Cart is empty',
+        }
       }
 
       const { id: cartId, items } = cart;
