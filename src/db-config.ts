@@ -4,7 +4,7 @@ import { CartItem } from "./cart/entities/cart-item.entity";
 import { Cart } from "./cart/entities/cart.entity";
 
 import * as dotenv from "dotenv";
-// import { User } from "./users/entities/user.entity";
+import { User } from "./users/entities/user.entity";
 
 dotenv.config();
 
@@ -15,7 +15,7 @@ export const dbConfig = {
   username:  process.env.DB_USER,
   password:  process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [Cart, CartItem],
+  entities: [Cart, CartItem, User],
   migrations: [join(__dirname, "src", "migrations", '*.{ts,js}')],
   migrationsRun: false,
   logging: true,
