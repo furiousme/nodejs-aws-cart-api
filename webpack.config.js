@@ -1,7 +1,7 @@
 module.exports = function (options, webpack) {
     return {
       ...options,
-      entry: ['./src/lambda.ts'],
+      entry: ['./src/main.ts'],
       externals: [],
       output: {
         ...options.output,
