@@ -26,6 +26,7 @@ import { UsersModule } from './users/users.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: () => {
+        // console.log("DB CONFIG", dbConfig)
         return dbConfig
       },
     })],

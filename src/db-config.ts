@@ -4,6 +4,7 @@ import { CartItem } from "./cart/entities/cart-item.entity";
 import { Cart } from "./cart/entities/cart.entity";
 
 import * as dotenv from "dotenv";
+// import { User } from "./users/entities/user.entity";
 
 dotenv.config();
 
@@ -20,7 +21,7 @@ export const dbConfig = {
   logging: true,
   ssl: false,
   extra: {
-    ssl: {
+    ssl: { 
       rejectUnauthorized: false
     },
   },
