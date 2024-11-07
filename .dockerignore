@@ -1,0 +1,16 @@
+# Dependencies and builds
+node_modules
+dist
+
+# No need for these files in prod
+.git
+.gitignore
+.dockerignore
+README.md
+.eslintrc.js
+.prettierrc
+cdk-deployment
+
+# Not to expose secrets
+.env
+.env.example

@@ -10,6 +10,7 @@
     "build": "nest build",
     "build-lambda": "npm run prebuild && nest build --webpack --webpackPath webpack.config.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "deploy": "eb deploy",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",

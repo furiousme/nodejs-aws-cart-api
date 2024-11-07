@@ -24,6 +24,7 @@ import {dbConfig} from './db-config';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: () => {
+        // console.log("DB CONFIG", dbConfig)
         return dbConfig
       },
     })],

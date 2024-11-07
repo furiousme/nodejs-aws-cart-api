@@ -3,7 +3,6 @@ import * as path from 'node:path';
 
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
-
 export default () => ({
     DATABASE: {
       DB_NAME: process.env.DB_NAME || "",
